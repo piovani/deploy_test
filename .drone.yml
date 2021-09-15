@@ -1,0 +1,13 @@
+kind: pipeline
+name: first-deploy
+
+steps:
+- name: test
+  image: golang
+  commands:
+  - go test
+
+- name: build
+  image: golang
+  commands:
+  - go build
