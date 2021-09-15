@@ -5,9 +5,30 @@ steps:
 - name: test
   image: golang
   commands:
+  - go get
   - go test
+  environment:
+    MESSAGE: "hello world"
+  when:
+    event:
+      - push
 
 - name: build
   image: golang
   commands:
+  - go get
   - go build
+  environment:
+    MESSAGE: "hello world"
+  when:
+    event:
+      - pupull_requestsh
+    branch:
+      - main
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+    - pull_request
