@@ -23,7 +23,7 @@ steps:
     MESSAGE: "hello world"
   when:
     event:
-      - pupull_requestsh
+      - pull_request
     branch:
       - main
 
