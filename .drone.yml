@@ -3,13 +3,33 @@ name: first-deploy
 type: docker
 
 steps:
-  - name: test
-    image: golang
-    commands:
-    - go get
-    - go test
-    environment:
-      MESSAGE: "hello world"
-    when:
-      event:
-        - push
+- name: test
+  image: golang
+  commands:
+  - go get
+  - go test
+  environment:
+    MESSAGE: "hello world"
+  when:
+    event:
+      - push
+
+- name: build
+  image: golang
+  commands:
+  - go get
+  - go build
+  environment:
+    MESSAGE: "hello world"
+  when:
+    event:
+      - pull_request
+    branch:
+      - main
+
+trigger:
+  branch:
+    - main
+  event:
+    - push
+    - pull_request
