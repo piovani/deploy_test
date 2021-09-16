@@ -1,5 +1,6 @@
 kind: pipeline
 name: first-deploy
+type: docker
 
 steps:
 - name: test
