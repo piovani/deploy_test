@@ -2,17 +2,27 @@ package main
 
 import (
 	"fmt"
-	"os"
+	"net/http"
 
-	"github.com/joho/godotenv"
+	"github.com/labstack/echo/v4"
 )
 
 func HelloWorld() string {
-	return os.Getenv("MESSAGE")
+	return "hello world"
+}
+
+func hello(c echo.Context) error {
+	return c.String(http.StatusOK, fmt.Sprintf("%s", HelloWorld()))
+}
+
+func initService() {
+	e := echo.New()
+
+	e.GET("/hello", hello)
+
+	e.Start(":8005")
 }
 
 func main() {
-	godotenv.Load()
-
-	fmt.Println(HelloWorld())
+	initService()
 }
