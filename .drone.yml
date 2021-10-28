@@ -1,16 +1,24 @@
 kind: pipeline
 name: first-deploy
-type: docker
+
+type: kubernetes
 
 platform:
   os: linux
   arch: amd64
 
+trigger:
+  branch:
+    - main
+  event:
+    - pull_request
+
 steps:
-  - name: test
-    image: golang
+  - name: testes
+    pull: if-not-exists
+    image: 289208114389.dkr.ecr.us-east-1.amazonaws.com/golang:alpine
     commands:
-    - go get
+    - apk add -U --no-cache curl ca-certificates git make build-base
     - go test
     environment:
       MESSAGE: "hello world"
@@ -18,23 +26,13 @@ steps:
       event:
         - push
 
-  - name: build
-    image: golang
-    commands:
-    - go get
-    - go build
-    environment:
-      MESSAGE: "hello world"
-    when:
-      event:
-        - push
-        - pull_request
-      branch:
-        - main
+  # - name: sonarcloud
+  #   pull: if-not-exists
+  #   image: 289208114389.dkr.ecr.us-east-1.amazonaws.com/sonarsource/sonar-scanner-cli
+  #   commands:
+  #     - sonar-scanner -Dproject.settings=.sonarcloud.properties -Dsonar.login=$SONAR_LOGIN -Dsonar.qualitygate.wait=true
+  #   environment:
+  #     SONAR_PROJECT_BASE_DIR: /
+  #     SONAR_LOGIN:
+  #       from_secret: SONAR_LOGIN
 
-trigger:
-  branch:
-    - main
-  event:
-    - push
-    - pull_request
